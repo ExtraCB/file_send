@@ -21,19 +21,12 @@
       <div class="col-2"></div>
       <div class="col-6">
         <?php
+        include('./../services/connect.php');
+        $query_depart = $conn->query('SELECT * FROM department');
+        $query_depart->execute();
+        $result_depart = $query_depart->fetchAll();
         session_start();
-        if (isset($_SESSION['error'])) { ?>
-        <div class="alert alert-danger">
-          <?= $_SESSION['error'] ?>
-          <?php unset($_SESSION['error']) ?>
-        </div>
-        <?php  }
-        if (isset($_SESSION['success'])) { ?>
-        <div class="alert alert-success">
-          <?= $_SESSION['success'] ?>
-          <?php unset($_SESSION['success']) ?>
-        </div>
-        <?php }
+        include('./components/error.php');
         ?>
         <h2>Register</h2>
         <form action="./../services/register_service.php" method="POST">
@@ -43,7 +36,20 @@
           <input class="form-control mb-2" type="text" name="password" id="" required>
           <label for="" class="form-label">Password-confirm : </label>
           <input class="form-control mb-2" type="text" name="password2" id="" required>
-          <input class="btn btn-primary mt-2" type="submit" name="register_submit" id="">
+          <label for="" class="form-label">Department : </label>
+          <?php
+          if ($result_depart) { ?>
+          <select name="dep" class="form-select" id="">
+            <option selected>โปรดเลือกแผนก</option>
+
+            <?php foreach ($result_depart as $dep) {
+              ?>
+            <option value="<?= $dep['de_id'] ?>"><?= $dep['de_name'] ?></option>
+            <?php } ?>
+          </select>
+          <?php }
+          ?>
+          <input class=" btn btn-primary mt-2" type="submit" name="register_submit" id="">
         </form>
 
       </div>

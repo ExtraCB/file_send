@@ -22,24 +22,15 @@
       <div class="col-6">
         <?php
         session_start();
-        if (isset($_SESSION['error'])) { ?>
-        <div class="alert alert-danger">
-          <?= $_SESSION['error'] ?>
-        </div>
-        <?php  }
-        if (isset($_SESSION['success'])) { ?>
-        <div class="alert alert-success">
-          <?= $_SESSION['success'] ?>
-        </div>
-        <?php }
+        include('./components/error.php');
         ?>
         <h2>Login</h2>
-        <form action="./../services/login_service.php">
+        <form action="./../services/login_service.php" method="POST">
           <label for="" class="form-label">Username : </label>
           <input class="form-control mb-2" type="text" name="username" id="">
           <label for="" class="form-label">Password : </label>
           <input class="form-control mb-2" type="text" name="password" id="">
-          <input class="btn btn-primary mt-2" type="submit" name="" id="">
+          <input class="btn btn-primary mt-2" type="submit" name="login_submit" id="">
         </form>
         <a href="./../pages/register_page.php">ยังไม่ได้สมัครสมาชิก ..</a>
       </div>
