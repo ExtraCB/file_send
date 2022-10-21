@@ -4,9 +4,10 @@
 
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="./home_page.php">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="./profile_page.php">Profile</a></li>
         <li class="nav-item"><a class="nav-link" href="./editdepart_page.php">จัดการแผนก</a></li>
+        <li class="nav-item"><a class="nav-link" href="./addfile_page.php">เพิ่มเอกสาร</a></li>
       </ul>
 
 

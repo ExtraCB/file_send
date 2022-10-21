@@ -3,9 +3,15 @@ session_start();
 include('./../services/connect.php');
 require_once('./../services/functions/securecheck.php');
 require_once('./../services/functions/department.php');
-require_once('./../services/functions/file_all.php');
-require_once('./../services/functions/file_depart.php');
+require_once('./../services/functions/file_myself.php');
 
+if (isset($_GET['fileid'])) {
+  $fileid = $_GET['fileid'];
+  $query_delete = $conn->query("DELETE FROM files WHERE file_id = $fileid AND file_owner = $myid");
+  $query_delete->execute();
+  $_SESSION['success'] = "delete success";
+  header('location:./addfile_page.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,15 +40,40 @@ require_once('./../services/functions/file_depart.php');
   <?php include('./components/navbar.php') ?>
 
   <div class="container">
+    <div class="row mt-5">
+      <div class="col-2"></div>
+      <div class="col-6">
+        <form class="" action="./../services/addfile.php" method="post" enctype="multipart/form-data">
+          <?php include('./components/error.php') ?>
+          <h3>เพิ่มไฟล์</h3>
+          <input type="file" name="file" class="form-control" value="" required>
+          <h4 class="mt-3">แผนกที่จะส่งให้</h4>
+          <?php
+          if ($result_depart) { ?>
+          <select name="dep" class="form-select" id="">
+            <option value="0" selected>ทุกคน</option>
+            <?php foreach ($result_depart as $dep) {
+              ?>
+            <option value="<?= $dep['de_id'] ?>"><?= $dep['de_name'] ?></option>
+            <?php } ?>
+          </select>
+          <?php }
+          ?>
+
+          <input type="submit" name="submitfile" class="btn btn-primary mt-2" value="addfile">
+          <input type="hidden" name="id_owner" value="<?= $_SESSION['user_id'] ?>">
+        </form>
+      </div>
+      <div class="col-2"></div>
+    </div>
+
     <div class="row">
 
       <div class="col-12">
-        <h3>ไฟล์ส่วนรวม</h3>
         <table class="table hover">
           <tr>
             <th>รหัสไฟล์</th>
             <th>ชื่อไฟล์</th>
-            <th>อัพโหลดจาก</th>
             <th>วันที่อัพโหลดไฟล์</th>
             <th>จัดการ</th>
           </tr>
@@ -51,40 +82,9 @@ require_once('./../services/functions/file_depart.php');
           <tr>
             <td><?= $file['file_id'] ?></td>
             <td><?= $file['file_name'] ?></td>
-            <td><?= $file['user_name'] ?></td>
             <td><?= $file['file_timestamp'] ?></td>
             <td>
-              <a href="./../files/<?= $file['file_name'] ?>" class="btn btn-outline-success" download>Download</a>
-            </td>
-          </tr>
-          <?php }
-          } ?>
-
-        </table>
-      </div>
-
-    </div>
-    <div class="row">
-
-      <div class="col-12">
-        <h3>ไฟล์ประจำแผนกของคุณ</h3>
-        <table class="table hover">
-          <tr>
-            <th>รหัสไฟล์</th>
-            <th>ชื่อไฟล์</th>
-            <th>อัพโหลดจาก</th>
-            <th>วันที่อัพโหลดไฟล์</th>
-            <th>จัดการ</th>
-          </tr>
-          <?php if ($result_dep) {
-            foreach ($result_dep  as $file_dep) { ?>
-          <tr>
-            <td><?= $file_dep['file_id'] ?></td>
-            <td><?= $file_dep['file_name'] ?></td>
-            <td><?= $file_dep['user_name'] ?></td>
-            <td><?= $file_dep['file_timestamp'] ?></td>
-            <td>
-              <a href="./../files/<?= $file_dep['file_name'] ?>" class="btn btn-outline-success" download>Download</a>
+              <a href="./addfile_page.php?fileid=<?= $file['file_id'] ?>" class="btn btn-outline-danger">Delete</a>
             </td>
           </tr>
           <?php }
@@ -95,6 +95,7 @@ require_once('./../services/functions/file_depart.php');
 
     </div>
   </div>
+
 
 
 
